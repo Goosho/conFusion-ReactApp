@@ -69,7 +69,7 @@ class Contact extends Component {
             errors.lastname='Lastname should be <=10 charactors';
 
         const reg=/^[0-9]*$/;
-        if(this.state.touched.telnum && reg.test(telnum))
+        if(this.state.touched.telnum && !reg.test(telnum))
             errors.telnum='Tel. Number should contain only numbers';
         if(this.state.touched.email && email.split('').filter(x=> x==='@').length!==1)
             errors.email='Email should contain @ sign'
