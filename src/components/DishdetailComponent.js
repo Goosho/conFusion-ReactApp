@@ -35,8 +35,9 @@ class CommentForm extends Component {
     }
 
     handleSubmit(values){
-        console.log("Current State is: " + JSON.stringify(values));
-        alert("Current State is: " + JSON.stringify(values));
+       this.toggleModal();
+       console.log(values);
+       this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
     }
 
 
@@ -68,7 +69,7 @@ class CommentForm extends Component {
                                 </Row>
                                 <Row className="form-group">
                                     <Label htmlFor="name">Your Name</Label>
-                                        <Control.text model=".name" id="name" name="name"
+                                        <Control.text model=".author" id="name" name="name"
                                             placeholder="Name"
                                             className="form-control"
                                             validators={{
@@ -77,7 +78,7 @@ class CommentForm extends Component {
                                             />
                                         <Errors
                                             className="text-danger"
-                                            model=".name"
+                                            model=".author"
                                             show="touched"
                                             messages={{
                                                 required: 'Required\n',
@@ -88,7 +89,7 @@ class CommentForm extends Component {
                                 </Row>
                                 <Row className="form-group">
                                 <Label htmlFor="message" >Comment </Label>
-                                    <Control.textarea model=".message" id="message" name="message"
+                                    <Control.textarea model=".comment" id="message" name="message"
                                         rows="6"
                                         className="form-control" />
                                 </Row>
@@ -129,14 +130,14 @@ class CommentForm extends Component {
     }
 
 
-    function RenderComments({comments}) 
+    function RenderComments({comments, addComment, dishId}) 
     {
  
         const cmnts = comments.map(comment => {
             return (
                 <div key={comment.id}>
                     <p>{comment.comment}</p>
-                    <p>-- {comment.author } 
+                    <p>-- {comment.author }{" "} 
                 
                     { new Intl.DateTimeFormat('en-US', {
                             year: 'numeric',
@@ -151,7 +152,7 @@ class CommentForm extends Component {
             <div className='col-12 col-md-5 m-1'>
                 <h4> Comments </h4>
                     {cmnts}
-                    <CommentForm/>
+                    <CommentForm dishId={dishId} addComment={addComment} />
             </div>
         );
     }
@@ -177,7 +178,10 @@ class CommentForm extends Component {
                 </div>
                 <div className="row">
                     <RenderDish dish= {props.dish}/>
-                    <RenderComments comments = {props.comments}/>                   
+                    <RenderComments comments={props.comments}
+                        addComment={props.addComment}
+                    dishId={props.dish.id}
+      />                
                 </div> 
             </div>
         )
